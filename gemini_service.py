@@ -2,7 +2,7 @@ import os
 
 from dotenv import load_dotenv
 
-from google import genai
+import google.generativeai as genai
 
 from config import GEMINI_MODEL
 
@@ -13,13 +13,13 @@ def generate_text(prompt: str) -> str:
     if not api_key:
         raise ValueError("Missing GEMINI_API_KEY.")
 
-    client = genai.Client(api_key=api_key)
+    genai.configure(api_key=api_key)
 
     try:
-        response = client.models.generate_content(
-            model=GEMINI_MODEL,
-            contents=f"Write a short, vivid hospitality concept description for: {prompt}",
-        )
+        response = genai.generate_text(
+    model=GEMINI_MODEL,
+    prompt=f"Write a short, vivid hospitality concept description for: {prompt}"
+)
     except Exception as exc:
         raise RuntimeError(f"Gemini API error: {exc}") from exc
 
